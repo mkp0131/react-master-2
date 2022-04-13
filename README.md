@@ -1,46 +1,67 @@
-# Getting Started with Create React App
+# 리액트 마스터 2
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## React Hook Form
 
-## Available Scripts
+- https://react-hook-form.com/
 
-In the project directory, you can run:
+### 장점
 
-### `npm start`
+- form, input 의 onchange(), onsubmit() 이벤트를 손쉽게 걸 수 있다.
+- 🧤🧤🧤 validate가 손쉽게 가능하며, 에러가 생긴 input 으로 자동으로 focus 가 이동한다.
+- 사용자가 형식에 맞게 값을 입력하면 에러 메세지(formState.errors)가 자동으로 사라진다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 사용법
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- useForm() 함수 실행으로 사용할 여가지 값들을 불러옴.
 
-### `npm test`
+```js
+import { useForm } from 'react-hook-form';
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+function App() {
+  const {
+    register, // onChange 이벤트를 가지고있음.
+    handleSubmit, // submit 시 사용
+    formState: { errors }, // 에러 데이터
+    setError, // 강제로 에러를 발생시킬때 사용
+  } = useForm<IForm>();
+}
+```
 
-### `npm run build`
+- register() 함수를 이용하여 input 에 세팅
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```js
+<input
+  type="text"
+  placeholder="닉네임"
+  maxLength={6}
+  {...register('displayName', {
+    required: '닉네임을 입력해주세요.', // true 가 아닌 에러메세지 넣을 수 있다.
+    minLength: { value: 3, message: '닉네임은 3글자 이상 입니다.' },
+    maxLength: { value: 6, message: '닉네임은 6글자 이하 입니다.' },
+  })}
+/>
+// 에러메세지 출력될 곳도 생성
+<span>{errors?.password1?.message}</span>
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- handleSubmit(콜백함수) 함수를 onSubmit 이벤트에 건다.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```js
+// onSubmit 시 validate 할 함수
+const onSubmit = (data: IForm) => {
+  if (data.password !== data.password1) {
+    console.log('틀림');
+    setError(
+      'password1',
+      { message: '패스워드가 일치하지 않습니다.' },
+      { shouldFocus: true }
+    );
+  }
+  // 전체 에러 (서버 다운 등등을 처리하면됨)
+  // setError("extraError", { message: "Server offline." });
+};
 
-### `npm run eject`
+<form onSubmit={handleSubmit(onSubmit)}></form>;
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- watch() 의 경우 register 가 변경될때마다 모든 정보를 return 한다.
