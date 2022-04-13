@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/react-master-2/static/css/main.9ffc4704.css",
+    "main.js": "/react-master-2/static/js/main.cceeedd4.js",
+    "index.html": "/react-master-2/index.html",
+    "main.9ffc4704.css.map": "/react-master-2/static/css/main.9ffc4704.css.map",
+    "main.cceeedd4.js.map": "/react-master-2/static/js/main.cceeedd4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9ffc4704.css",
+    "static/js/main.cceeedd4.js"
+  ]
+}
